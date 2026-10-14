@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export function Register({ setCurrentView, setUser }) {
   const [formData, setFormData] = useState({

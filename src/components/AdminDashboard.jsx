@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-
+import { useState } from 'react';
 export function AdminDashboard({ games, onAddGame, onDeleteGame }) {
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');

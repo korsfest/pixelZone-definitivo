@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-
+import { useState } from 'react';
 export function Login({ setCurrentView, setUser }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

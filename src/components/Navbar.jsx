@@ -1,4 +1,3 @@
-import React from 'react';
 
 export function Navbar({ currentView, setCurrentView, cartCount, setIsCartOpen, user, setUser }) {
   const handleLogout = () => {

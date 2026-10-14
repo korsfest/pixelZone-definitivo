@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function CartModal({ isOpen, onClose, cart, removeFromCart, updateQuantity, setCurrentView, user, setLastOrder, clearCart }) {
     if (!isOpen) return null;
 

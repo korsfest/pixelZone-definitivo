@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { initialGames } from '../data/gamesData';
 
 export function Catalog({ games = [], addToCart }) {
