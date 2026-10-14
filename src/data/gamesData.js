@@ -225,10 +225,10 @@ export const getStoredGames = () => {
       return initialGames;
     }
     return parsed;
-  } catch (e) {
-    localStorage.setItem('pixelzone_games', JSON.stringify(initialGames));
-    return initialGames;
-  }
+ } catch {
+  localStorage.setItem('pixelzone_games', JSON.stringify(initialGames));
+  return initialGames;
+}
 };
 
 export const saveGames = (games) => {
