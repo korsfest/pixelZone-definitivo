@@ -1,0 +1,2 @@
+# Inicio
+Proyecto inicializado correctamente.
