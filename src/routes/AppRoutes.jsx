@@ -16,6 +16,7 @@ export function AppRoutes({
   clearCart,
   lastOrder,
   handleAddGame,
+  handleUpdateGame,
   handleDeleteGame,
   setUser
 }) {
@@ -58,6 +59,7 @@ export function AppRoutes({
         <AdminDashboard
           games={games}
           onAddGame={handleAddGame}
+          onUpdateGame={handleUpdateGame}
           onDeleteGame={handleDeleteGame}
         />
       );

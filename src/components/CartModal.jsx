@@ -1,7 +1,14 @@
 export function CartModal({ isOpen, onClose, cart, removeFromCart, updateQuantity, setCurrentView, user, setLastOrder, clearCart }) {
-    if (!isOpen) return null;
+  if (!isOpen) return null;
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const getPrice = (item) => Number(item.precio ?? item.price ?? 0);
+  const getTitle = (item) => item.titulo || item.title || 'Juego';
+  const getImage = (item) =>
+    item.imagenUrl ||
+    item.image ||
+    'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80';
+
+  const total = cart.reduce((sum, item) => sum + getPrice(item) * item.quantity, 0);
 
   const handleFinalizarCompra = () => {
     if (cart.length === 0) {
@@ -25,8 +32,8 @@ export function CartModal({ isOpen, onClose, cart, removeFromCart, updateQuantit
       orderCode: `ORDER${Math.floor(10000 + Math.random() * 90000)}`,
       ...clientData,
       items: cart.map(item => ({
-        name: item.title,
-        price: item.price,
+        name: getTitle(item),
+        price: getPrice(item),
         quantity: item.quantity
       }))
     };
@@ -50,7 +57,8 @@ export function CartModal({ isOpen, onClose, cart, removeFromCart, updateQuantit
           </div>
           <div className="modal-body">
             {cart.length === 0 ? (
-              <p className="text-center my-4 text-muted">Tu carrito está vacío</p>            ) : (
+              <p className="text-center my-4 text-muted">Tu carrito está vacío</p>
+            ) : (
               <div className="table-responsive">
                 <table className="table table-dark align-middle">
                   <thead>
@@ -63,41 +71,54 @@ export function CartModal({ isOpen, onClose, cart, removeFromCart, updateQuantit
                     </tr>
                   </thead>
                   <tbody>
-                    {cart.map((item) => (
-                      <tr key={item.id}>
-                        <td>
-                          <div className="d-flex align-items-center gap-2">
-                            <img src={item.image} alt={item.title} width="40" height="30" className="rounded object-fit-cover" />
-                            <span className="fw-semibold">{item.title}</span>
-                          </div>
-                        </td>
-                        <td>${item.price.toLocaleString('es-CL')}</td>
-                            <td>
-                              <div className="d-flex align-items-center justify-content-center gap-2">
-                                <button 
-                                  type="button"
-                                  className="btn btn-sm btn-outline-secondary text-light px-2 py-0" 
-                                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                >
-                                  -
-                                </button>
-                                <span className="fw-bold px-1">{item.quantity}</span>
-                                <button 
-                                  type="button"
-                                  className="btn btn-sm btn-outline-secondary text-light px-2 py-0" 
-                                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                >
-                                  +
-                                </button>
-                              </div>
-                            </td>                        <td className="text-success fw-bold">${(item.price * item.quantity).toLocaleString('es-CL')}</td>
-                        <td className="text-center">
-                          <button className="btn btn-outline-danger btn-sm" onClick={() => removeFromCart(item.id)}>
-                            <i className="bi bi-trash"></i>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                    {cart.map((item) => {
+                      const unitPrice = getPrice(item);
+                      const title = getTitle(item);
+                      return (
+                        <tr key={item.id}>
+                          <td>
+                            <div className="d-flex align-items-center gap-2">
+                              <img
+                                src={getImage(item)}
+                                alt={title}
+                                width="40"
+                                height="30"
+                                className="rounded object-fit-cover"
+                              />
+                              <span className="fw-semibold">{title}</span>
+                            </div>
+                          </td>
+                          <td>${unitPrice.toLocaleString('es-CL')}</td>
+                          <td>
+                            <div className="d-flex align-items-center justify-content-center gap-2">
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-outline-secondary text-light px-2 py-0"
+                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                              >
+                                -
+                              </button>
+                              <span className="fw-bold px-1">{item.quantity}</span>
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-outline-secondary text-light px-2 py-0"
+                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                              >
+                                +
+                              </button>
+                            </div>
+                          </td>
+                          <td className="text-success fw-bold">
+                            ${(unitPrice * item.quantity).toLocaleString('es-CL')}
+                          </td>
+                          <td className="text-center">
+                            <button className="btn btn-outline-danger btn-sm" onClick={() => removeFromCart(item.id)}>
+                              <i className="bi bi-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -111,8 +132,8 @@ export function CartModal({ isOpen, onClose, cart, removeFromCart, updateQuantit
               <h5 className="m-0 fw-bold">
                 Total: <span className="text-success">${total.toLocaleString('es-CL')}</span>
               </h5>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="btn btn-primary fw-bold px-4"
                 onClick={handleFinalizarCompra}
                 disabled={cart.length === 0}
